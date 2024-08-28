@@ -1,1 +1,1 @@
-# Capstone-2
+# Plex Clone - Capstone-2
