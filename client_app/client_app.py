@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi('ui/pages.ui', self)
 
-        self.setWindowTitle("MyMedia")
+        self.setWindowTitle("MyMedia Client")
         self.setFixedSize(QSize(900, 600))
 
         # Add widgets to stacked widget
