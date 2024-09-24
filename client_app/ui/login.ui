@@ -53,7 +53,7 @@
     <string>Log In</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="usernameEdit">
    <property name="geometry">
     <rect>
      <x>330</x>
@@ -66,7 +66,7 @@
     <string>Username/Email</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="passwordEdit">
    <property name="geometry">
     <rect>
      <x>330</x>
