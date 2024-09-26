@@ -39,3 +39,6 @@ class HomeScreen(QWidget):
         self.bookSelection.tabWidget.setCurrentIndex(Constants.LIBRARY_INDEX)
         self.stackedWidget.setCurrentIndex(Constants.BOOK_SELECTION_SCREEN_INDEX)
 
+    def updateContent(self):
+        self.movieSelection.updateMovies()
+
