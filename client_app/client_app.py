@@ -38,6 +38,7 @@ class MainWindow(QMainWindow):
         self.loginScreen.usernameEdit.clear()
         self.loginScreen.passwordEdit.clear()
         self.homeScreen.showMovies()
+        self.homeScreen.showMusic()
         self.homeScreen.updateContent()
         self.goToHome()
     
