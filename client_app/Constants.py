@@ -3,6 +3,7 @@
 # ==================================================================
 LOGIN_SCREEN_INDEX = 0
 HOME_SCREEN_INDEX = 1
+WATCH_MOVIE_SCREEN_INDEX = 2
 
 # ==================================================================
 # Home screen stacked widget indexes
