@@ -37,8 +37,8 @@ class MainWindow(QMainWindow):
         # This will eventually handle accounts and whatnot
         self.loginScreen.usernameEdit.clear()
         self.loginScreen.passwordEdit.clear()
+        # Show the movies selection screen upon logging in
         self.homeScreen.showMovies()
-        self.homeScreen.showMusic()
         self.homeScreen.updateContent()
         self.goToHome()
     
