@@ -29,9 +29,10 @@ class MainWindow(QMainWindow):
         self.stackedWidget.addWidget(self.watchMovieScreen)
 
         # Connect buttons
-        self.loginScreen.loginButton.clicked.connect(self.watchMovieClicked) # clicking login button takes you to movie selection screen
+        self.loginScreen.loginButton.clicked.connect(self.loginButtonClicked) # clicking login button takes you to movie selection screen
         self.homeScreen.logoutButton.clicked.connect(self.logoutButtonClicked)
         self.watchMovieScreen.homeButton.clicked.connect(self.homeButtonClicked)
+        self.homeScreen.playButton.clicked.connect(self.watchMovieClicked)
         
 
     def goToHome(self):
