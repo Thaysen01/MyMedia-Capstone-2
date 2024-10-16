@@ -1,0 +1,38 @@
+import socket
+import os
+serverRunning = True
+def startServer():
+    global serverRunning
+
+    serverRunning = True
+    host='127.0.0.1'
+    port=12345
+    filename='movie.mp4'
+    # Create a TCP/IP socket
+    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serverSocket.bind((host, port))
+    serverSocket.listen(1)
+    
+    print(f'Server listening on {host}:{port}')
+
+    while serverRunning:
+        connection, clientAddress = serverSocket.accept()
+        try:
+            print(f'Connection from {clientAddress}')
+            with open(filename, 'rb') as f:
+                # Send the file size first
+                fileSize = os.path.getsize(filename)
+                connection.sendall(str(fileSize).encode() + b'\n')
+
+                # Send the file data
+                while True:
+                    data = f.read(1024)
+                    if not data:
+                        break
+                    connection.sendall(data)
+        finally:
+            connection.close()
+
+def stopServer():
+    global serverRunning
+    serverRunning = False
