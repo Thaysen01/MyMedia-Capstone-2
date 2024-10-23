@@ -42,4 +42,4 @@ if __name__ == '__main__':
     w = MainWindow() # Create main window
     w.show() # displays the window
     app.exec() # execute the app
-    app.aboutToQuit.connect(Server.stopServer)
+    Server.stopServer()

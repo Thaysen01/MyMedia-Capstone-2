@@ -1,5 +1,6 @@
 import socket
 import os
+
 serverRunning = True
 def startServer():
     global serverRunning
@@ -12,12 +13,14 @@ def startServer():
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.bind((host, port))
     serverSocket.listen(1)
+    serverSocket.settimeout(1)
     
     print(f'Server listening on {host}:{port}')
 
     while serverRunning:
-        connection, clientAddress = serverSocket.accept()
+        connection = None
         try:
+            connection, clientAddress = serverSocket.accept()
             print(f'Connection from {clientAddress}')
             with open(filename, 'rb') as f:
                 # Send the file size first
@@ -30,8 +33,11 @@ def startServer():
                     if not data:
                         break
                     connection.sendall(data)
+        except:
+            pass
         finally:
-            connection.close()
+            if connection is not None:
+                connection.close()
 
 def stopServer():
     global serverRunning
