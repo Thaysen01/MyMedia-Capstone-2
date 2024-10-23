@@ -12,7 +12,7 @@ class HomeScreen(QWidget):
         super().__init__(*args, **kwargs)
         uic.loadUi("ui/homeScreen.ui", self)
 
-        # Add pages to stacked widget
+        # Add pages to stacked widget / last to be run = starting screen
         self.movieSelection = MovieSelectionScreen()
         self.stackedWidget.addWidget(self.movieSelection) 
 
@@ -38,4 +38,8 @@ class HomeScreen(QWidget):
     def showBooks(self):
         self.bookSelection.tabWidget.setCurrentIndex(Constants.LIBRARY_INDEX)
         self.stackedWidget.setCurrentIndex(Constants.BOOK_SELECTION_SCREEN_INDEX)
+
+    def updateContent(self):
+        self.movieSelection.updateMovies()
+        self.musicSelection.updateMusic()
 
