@@ -19,7 +19,6 @@ class MusicSelectionScreen(QWidget):
         musicTable.setColumnCount(1)
 
         for i in range(len(musicList)):
-            print(i)
             musicTable.setItem(i, 0, QTableWidgetItem())
             musicTable.item(i, 0).setText(musicList[i])
         
