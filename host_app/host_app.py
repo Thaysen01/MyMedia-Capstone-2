@@ -5,8 +5,9 @@ from PyQt6.QtGui import *
 from PyQt6 import uic
 from Login import LoginScreen
 from HomeScreen import HomeScreen
+import Server
 import Constants
-
+import threading
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -16,6 +17,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("MyMedia Host")
         self.setFixedSize(QSize(900, 600))
 
+        
         # Add widgets to stacked widget
         self.loginScreen = LoginScreen()
         self.stackedWidget.addWidget(self.loginScreen) # add each screen to the QStackedWidget
@@ -28,9 +30,16 @@ class MainWindow(QMainWindow):
 
     def goToHome(self):
         self.stackedWidget.setCurrentIndex(Constants.HOME_SCREEN_INDEX)
-
+    
+    def loginButtonClicked(self):
+        global serverThread
+        self.goToHome()
+    
 if __name__ == '__main__': 
+    serverThread = threading.Thread(target=Server.startServer)
+    serverThread.start()
     app = QApplication(sys.argv)
     w = MainWindow() # Create main window
     w.show() # displays the window
     app.exec() # execute the app
+    Server.stopServer()
