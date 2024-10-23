@@ -26,18 +26,16 @@ class MainWindow(QMainWindow):
         self.stackedWidget.addWidget(self.homeScreen)
 
         # Connect buttons
-        self.loginScreen.loginButton.clicked.connect(self.goToHome) # clicking login button takes you to movie selection screen
+        self.loginScreen.loginButton.clicked.connect(self.loginButtonClicked) # clicking login button takes you to movie selection screen
 
     def goToHome(self):
         self.stackedWidget.setCurrentIndex(Constants.HOME_SCREEN_INDEX)
     
     def loginButtonClicked(self):
-        global serverThread
+        Server.startServer()
         self.goToHome()
     
 if __name__ == '__main__': 
-    serverThread = threading.Thread(target=Server.startServer)
-    serverThread.start()
     app = QApplication(sys.argv)
     w = MainWindow() # Create main window
     w.show() # displays the window

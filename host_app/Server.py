@@ -1,8 +1,9 @@
 import socket
+import threading
 import os
 
 serverRunning = True
-def startServer():
+def runServer():
     global serverRunning
 
     serverRunning = True
@@ -38,6 +39,10 @@ def startServer():
         finally:
             if connection is not None:
                 connection.close()
+
+def startServer():
+    serverThread = threading.Thread(target=runServer)
+    serverThread.start()
 
 def stopServer():
     global serverRunning
