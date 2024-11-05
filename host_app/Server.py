@@ -1,6 +1,7 @@
 import socket
 import threading
 import os
+import pickle
 
 serverRunning = True
 def runServer():
@@ -22,20 +23,51 @@ def runServer():
         connection = None
         try:
             connection, clientAddress = serverSocket.accept()
-            print(f'Connection from {clientAddress}')
-            with open(filename, 'rb') as f:
-                # Send the file size first
-                fileSize = os.path.getsize(filename)
-                connection.sendall(str(fileSize).encode() + b'\n')
+            clientChoice = 'getMovies'
+            clientChoice = (connection.recv(1024).decode().strip())
 
-                # Send the file data
-                while True:
-                    data = f.read(1024)
-                    if not data:
-                        break
-                    connection.sendall(data)
-        except:
-            pass
+            # Handle a get movie list/picture request
+            if clientChoice == 'getMovies':
+                print('Sending Movie list')
+                # this will be retrieved from the database
+                movieList = ['Spiderman', 'Transformers', 'Harry Potter and the Sorcerer\'s Stone', 'Jurassic Park', 'The Dark Knight', 'Cars', 'Cars 2', 'Interstellar', 'Airbud', 'The Princess Bride']
+                movieImageList = ['spiderman.png', 'transformers.png', 'harry_potter.png', 'jurassic_park.png', 'dark_knight.png', 'cars.png', 'cars_2.png', 'interstellar.png', 'airbud.jpg', 'princess_bride.jpg']
+                connection.sendall(pickle.dumps(movieList))
+
+                # Send each movie image file
+                for movieImage in movieImageList:
+                    with open(movieImage, 'rb') as f:
+                        # Send the file size first
+                        fileSize = os.path.getsize(movieImage)
+                        connection.sendall(str(fileSize).encode() + b'\n')
+
+                        # Wait until receive ready to send
+                        while connection.recv(1024) != b'a' :
+                            pass
+
+                        # Send the file data
+                        while True:
+                            data = f.read(1024)
+                            if not data:
+                                break
+                            connection.sendall(data)         
+
+            # Handle a get movie video/audio request
+            elif clientChoice == 'getMovieVideo':
+                print(f'Connection from {clientAddress}, sending movie')
+                with open(filename, 'rb') as f:
+                    # Send the file size first
+                    fileSize = os.path.getsize(filename)
+                    connection.sendall(str(fileSize).encode() + b'\n')
+
+                    # Send the file data
+                    while True:
+                        data = f.read(1024)
+                        if not data:
+                            break
+                        connection.sendall(data)
+        except Exception as e:
+            print(e)
         finally:
             if connection is not None:
                 connection.close()

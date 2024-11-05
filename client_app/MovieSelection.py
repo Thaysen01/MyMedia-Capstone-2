@@ -4,6 +4,10 @@ from PyQt6.QtGui import *
 from PyQt6 import uic
 import math
 import Constants
+import socket
+import pickle
+from PIL import Image
+import io
 
 MOVIE_TABLE_COLUMN_COUNT = 5
 
@@ -49,6 +53,42 @@ class MovieSelectionScreen(QWidget):
 
     def getMovies(self):
         # Gets the list of uploaded movies from the host app
-        return {'movies':['Spiderman', 'Transformers', 'Harry Potter and the Sorcerer\'s Stone', 'Jurassic Park', 'The Dark Knight', 'Cars', 'Cars 2', 'Interstellar', 'Airbud', 'The Princess Bride'], 
-                'coverImages': ['spiderman.png', 'transformers.png', 'harry_potter.png', 'jurassic_park.png', 'dark_knight.png', 'cars.png', 'cars_2.png', 'interstellar.png', 'airbud.jpg', 'princess_bride.jpg']}
+        host='127.0.0.1'
+        port=12345
+
+        # Create a TCP/IP socket
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        clientSocket.connect((host, port))
+        clientSocket.sendall(b'getMovies')
+        data = clientSocket.recv(1024)
+        movies = pickle.loads(data)
+        coverImages = []
+
+        # Receive the movie image files and store them locally
+        for movie in movies:
+            data = clientSocket.recv(1024)
+            print(data)
+            fileSize = int(data.decode().strip())
+            receivedData = bytearray()
+
+            # Send ready to receive signal
+            clientSocket.send(b'a')
+
+            # receive image
+            while len(receivedData) < fileSize:
+                data = clientSocket.recv(1024)
+                if not data:
+                    break
+                receivedData.extend(data)
+                
+            # set up image file/file list
+            fileName = movie.replace(' ', '_') + '.png'
+            coverImages.append(fileName)
+            filePath = 'movie_images/' + fileName
+            print(len(receivedData))
+            image = Image.open(io.BytesIO(receivedData))
+            image.save(filePath)
+        clientSocket.close()
+        retVal = {'movies': movies, 'coverImages': coverImages}
+        return retVal
 

@@ -50,7 +50,7 @@ class WatchMovieScreen(QWidget):
         # Create a TCP/IP socket
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         clientSocket.connect((host, port))
-
+        clientSocket.sendall(b'getMovieVideo')
         # Read file size
         fileSize = int(clientSocket.recv(1024).decode().strip())
         receivedData = bytearray()
