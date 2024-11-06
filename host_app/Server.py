@@ -10,7 +10,6 @@ def runServer():
     serverRunning = True
     host='127.0.0.1'
     port=12345
-    filename='movie.mp4'
     # Create a TCP/IP socket
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.bind((host, port))
@@ -30,8 +29,10 @@ def runServer():
             if clientChoice == 'getMovies':
                 print('Sending Movie list')
                 # this will be retrieved from the database
+                movieIDList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                 movieList = ['Spiderman', 'Transformers', 'Harry Potter and the Sorcerer\'s Stone', 'Jurassic Park', 'The Dark Knight', 'Cars', 'Cars 2', 'Interstellar', 'Airbud', 'The Princess Bride']
                 movieImageList = ['spiderman.png', 'transformers.png', 'harry_potter.png', 'jurassic_park.png', 'dark_knight.png', 'cars.png', 'cars_2.png', 'interstellar.png', 'airbud.jpg', 'princess_bride.jpg']
+                connection.sendall(pickle.dumps(movieIDList))
                 connection.sendall(pickle.dumps(movieList))
 
                 # Send each movie image file
@@ -42,7 +43,7 @@ def runServer():
                         connection.sendall(str(fileSize).encode() + b'\n')
 
                         # Wait until receive ready to send
-                        while connection.recv(1024) != b'a' :
+                        while connection.recv(1024) != b'a':
                             pass
 
                         # Send the file data
@@ -54,7 +55,11 @@ def runServer():
 
             # Handle a get movie video/audio request
             elif clientChoice == 'getMovieVideo':
-                print(f'Connection from {clientAddress}, sending movie')
+                movieID = int(connection.recv(1024).decode())
+                print(f'Connection from {clientAddress}, sending movie id {movieID}')
+
+                # Get filepath from database where movie id == movieID
+                filename='movie.mp4'
                 with open(filename, 'rb') as f:
                     # Send the file size first
                     fileSize = os.path.getsize(filename)

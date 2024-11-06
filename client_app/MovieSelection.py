@@ -16,11 +16,13 @@ class MovieSelectionScreen(QWidget):
         super().__init__(*args, **kwargs)
         uic.loadUi("ui/movieSelection.ui", self)
 
+        self.movieInfo = {}
+
     def updateMovies(self):
         # Updates the displayed movie table
-        movieInfo = self.getMovies()
-        movieList = movieInfo['movies']
-        movieImages = movieInfo['coverImages']
+        self.movieInfo = self.getMovies()
+        movieList = self.movieInfo['movies']
+        movieImages = self.movieInfo['coverImages']
         movieTable = self.tabWidget.widget(0).children()[0]
         movieTable.setRowCount(math.ceil(len(movieList) / MOVIE_TABLE_COLUMN_COUNT))
         movieTable.setColumnCount(MOVIE_TABLE_COLUMN_COUNT)
@@ -49,7 +51,6 @@ class MovieSelectionScreen(QWidget):
 
             # set the table to show the poster and title
             movieTable.setCellWidget(i // MOVIE_TABLE_COLUMN_COUNT, i % MOVIE_TABLE_COLUMN_COUNT, imageWithText)            
-        
 
     def getMovies(self):
         # Gets the list of uploaded movies from the host app
@@ -61,7 +62,10 @@ class MovieSelectionScreen(QWidget):
         clientSocket.connect((host, port))
         clientSocket.sendall(b'getMovies')
         data = clientSocket.recv(1024)
+        movieIDList = pickle.loads(data)
+        data = clientSocket.recv(1024)
         movies = pickle.loads(data)
+
         coverImages = []
 
         # Receive the movie image files and store them locally
@@ -89,6 +93,12 @@ class MovieSelectionScreen(QWidget):
             image = Image.open(io.BytesIO(receivedData))
             image.save(filePath)
         clientSocket.close()
-        retVal = {'movies': movies, 'coverImages': coverImages}
+        retVal = {'movies': movies, 'coverImages': coverImages, 'movieIDList': movieIDList}
         return retVal
 
+    def getSelectedMovieID(self):
+        movieTable = self.tabWidget.widget(0).children()[0]
+        movieIndex = movieTable.currentRow() * movieTable.columnCount() + movieTable.currentColumn()
+        if movieIndex >= 0:
+            return self.movieInfo['movieIDList'][movieIndex]
+        return -1
