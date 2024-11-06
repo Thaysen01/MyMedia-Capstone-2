@@ -1,7 +1,10 @@
 import socket
 import threading
-import os
+import sys, os
 import pickle
+sys.path.append(os.path.abspath(os.path.join('..', 'config')))
+
+import Database.DatabaseFunctions as db
 
 serverRunning = True
 def runServer():
@@ -29,9 +32,9 @@ def runServer():
             if clientChoice == 'getMovies':
                 print('Sending Movie list')
                 # this will be retrieved from the database
-                movieIDList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                movieList = ['Spiderman', 'Transformers', 'Harry Potter and the Sorcerer\'s Stone', 'Jurassic Park', 'The Dark Knight', 'Cars', 'Cars 2', 'Interstellar', 'Airbud', 'The Princess Bride']
-                movieImageList = ['spiderman.png', 'transformers.png', 'harry_potter.png', 'jurassic_park.png', 'dark_knight.png', 'cars.png', 'cars_2.png', 'interstellar.png', 'airbud.jpg', 'princess_bride.jpg']
+                movieIDList = db.getMovieIDList()
+                movieList = db.getMovieList()
+                movieImageList = db.getMovieImageList()
                 connection.sendall(pickle.dumps(movieIDList))
                 connection.sendall(pickle.dumps(movieList))
 
@@ -59,7 +62,7 @@ def runServer():
                 print(f'Connection from {clientAddress}, sending movie id {movieID}')
 
                 # Get filepath from database where movie id == movieID
-                filename='movie.mp4'
+                filename = db.getMoviePath(movieID)
                 with open(filename, 'rb') as f:
                     # Send the file size first
                     fileSize = os.path.getsize(filename)

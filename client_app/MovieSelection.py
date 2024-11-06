@@ -8,6 +8,7 @@ import socket
 import pickle
 from PIL import Image
 import io
+import os
 
 MOVIE_TABLE_COLUMN_COUNT = 5
 
@@ -54,6 +55,12 @@ class MovieSelectionScreen(QWidget):
 
     def getMovies(self):
         # Gets the list of uploaded movies from the host app
+
+        # Create image folder if it does not already exist
+        if not os.path.exists("movie_images"):
+            os.makedirs("movie_images")
+
+        # Set connection variables    
         host='127.0.0.1'
         port=12345
 
