@@ -2,7 +2,7 @@ import socket
 import threading
 import sys, os
 import pickle
-sys.path.append(os.path.abspath(os.path.join('..', 'config')))
+sys.path.append(os.path.abspath(os.path.join('..')))
 
 import Database.DatabaseFunctions as db
 
