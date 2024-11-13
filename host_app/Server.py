@@ -10,7 +10,10 @@ def runServer():
     serverRunning = True
     host='127.0.0.1'
     port=12345
-    filename='movie.mp4'
+    #Currently need to convert mp4 file to mp3 and have both in the folder. These should be stored on the device outside of these folders ig, 
+    #...Filename="..\..\..\..\Videos\Created Videos\FirstCastedRLSnT.mp4" #location on device
+    audioFilename='movie.mp3'
+    videoFilename='movie.mp4'
     # Create a TCP/IP socket
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.bind((host, port))
@@ -42,7 +45,7 @@ def runServer():
                         connection.sendall(str(fileSize).encode() + b'\n')
 
                         # Wait until receive ready to send
-                        while connection.recv(1024) != b'a' :
+                        while connection.recv(1024) != b'a':
                             pass
 
                         # Send the file data
@@ -50,27 +53,37 @@ def runServer():
                             data = f.read(1024)
                             if not data:
                                 break
-                            connection.sendall(data)         
+                            connection.sendall(data)
 
             # Handle a get movie video/audio request
             elif clientChoice == 'getMovieVideo':
-                print(f'Connection from {clientAddress}, sending movie')
-                with open(filename, 'rb') as f:
-                    # Send the file size first
-                    fileSize = os.path.getsize(filename)
-                    connection.sendall(str(fileSize).encode() + b'\n')
+                print(f'Connection from {clientAddress}')
+                # Send video file
+                send_file(connection, videoFilename)
+                # Send audio file
+                send_file(connection, audioFilename)
 
-                    # Send the file data
-                    while True:
-                        data = f.read(1024)
-                        if not data:
-                            break
-                        connection.sendall(data)
         except Exception as e:
             print(e)
         finally:
             if connection is not None:
                 connection.close()
+
+def send_file(connection, filename):
+    """Helper function to send a file over a socket connection."""
+    with open(filename, 'rb') as f:
+        fileSize = os.path.getsize(filename)
+        print(f"Sending '{filename}' with size {fileSize}")
+        
+        # Send the file size as a 4-byte integer (big-endian)
+        connection.sendall(fileSize.to_bytes(4, byteorder='big'))
+
+        # Send the file data
+        while True:
+            data = f.read(1024)
+            if not data:
+                break
+            connection.sendall(data)
 
 def startServer():
     serverThread = threading.Thread(target=runServer)
