@@ -51,12 +51,3 @@ def getMovieImageList():
     movieImageList = res.fetchall()
     con.close()
     return [movieImage[0] for movieImage in movieImageList]
-
-def getSongAudioPath(songID):
-    # Gets the filepath of a song given its id
-    con = sqlite3.connect(db_path)
-    cur = con.cursor()
-    res = cur.execute(f'SELECT audioPath FROM coreInfo WHERE ID={songID}')
-    path = res.fetchall()[0]
-    con.close()
-    return path[0]

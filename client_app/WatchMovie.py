@@ -68,12 +68,8 @@ class WatchMovieScreen(QWidget):
         # Set video source
         self.video_player.setSource(QUrl.fromLocalFile(video_temp_path))
         
-        # Receive audio file
-        audio_file_data = self.receive_file(clientSocket)
-        audio_temp_path = self.save_file_to_temp(audio_file_data, '.mp3')
-        
         # Set audio source
-        audio_url = QUrl.fromLocalFile(audio_temp_path)
+        audio_url = QUrl.fromLocalFile(video_temp_path)
         if audio_url.isValid():
             self.audio_player.setSource(audio_url)
 
@@ -108,6 +104,7 @@ class WatchMovieScreen(QWidget):
     def setPosition(self, position):
         # Sets the movie position based on the slider
         self.video_player.setPosition(position)
+        self.audio_player.setPosition(position)
 
     def positionChanged(self, position):
         # Sets the slider position based on the movie position

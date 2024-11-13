@@ -64,8 +64,6 @@ def runServer():
                 audioFilename = db.getMovieAudioPath(movieID)
                 # Send video file
                 send_file(connection, videoFilename)
-                # Send audio file
-                send_file(connection, audioFilename)
             
             elif clientChoice == 'getSong':
                 print(f'Connection from {clientAddress}')
