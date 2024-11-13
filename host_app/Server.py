@@ -66,6 +66,13 @@ def runServer():
                 send_file(connection, videoFilename)
                 # Send audio file
                 send_file(connection, audioFilename)
+            
+            elif clientChoice == 'getSong':
+                print(f'Connection from {clientAddress}')
+                songID = int(connection.recv(1024).decode())
+                audioFilename = db.getSongAudioPath(songID)
+                # Send audio file
+                send_file(connection, audioFilename)       
 
         except Exception as e:
             print(e)

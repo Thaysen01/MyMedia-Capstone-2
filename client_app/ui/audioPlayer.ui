@@ -76,19 +76,6 @@
     <string>Home</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="fullScreenButton">
-   <property name="geometry">
-    <rect>
-     <x>820</x>
-     <y>550</y>
-     <width>71</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Fullscreen</string>
-   </property>
-  </widget>
   <widget class="QSlider" name="audioSlider">
    <property name="geometry">
     <rect>
@@ -113,6 +100,19 @@
    </property>
    <property name="text">
     <string>Volume</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="albumCover">
+   <property name="geometry">
+    <rect>
+     <x>225</x>
+     <y>50</y>
+     <width>450</width>
+     <height>450</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Album Cover</string>
    </property>
   </widget>
  </widget>

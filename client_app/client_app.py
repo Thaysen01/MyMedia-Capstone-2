@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
         self.loginScreen.loginButton.clicked.connect(self.loginButtonClicked) # clicking login button takes you to movie selection screen
         self.homeScreen.logoutButton.clicked.connect(self.logoutButtonClicked)
         self.watchMovieScreen.homeButton.clicked.connect(self.homeButtonClicked)
+        self.audioPlayerScreen.homeButton.clicked.connect(self.homeButtonClicked)
         self.homeScreen.playButton.clicked.connect(self.playButtonClicked)
         
 
@@ -53,7 +54,6 @@ class MainWindow(QMainWindow):
 
     def goToAudioPlayer(self):
         # Sets the current page to the watch movie page
-        print('asdf')
         self.stackedWidget.setCurrentIndex(Constants.AUDIO_PLAYER_SCREEN_INDEX)
 
     def loginButtonClicked(self):
@@ -73,13 +73,15 @@ class MainWindow(QMainWindow):
         # Retrieves selected movie and goes to watch movie screen
         selectedItemID = self.homeScreen.getSelectedItemID()
         if selectedItemID >= 0: 
-            print(self.homeScreen.stackedWidget.currentIndex())
             if self.homeScreen.stackedWidget.currentIndex() == Constants.MOVIE_SELECTION_SCREEN_INDEX:
                 self.watchMovieScreen.getMovie(selectedItemID)
                 self.watchMovieScreen.playButton.setText('Play')
                 sleep(1)
                 self.goToWatchMovie()
             elif self.homeScreen.stackedWidget.currentIndex() == Constants.MUSIC_SELECTION_SCREEN_INDEX:
+                self.audioPlayerScreen.getSong(3)
+                self.watchMovieScreen.playButton.setText('Play')
+                sleep(1)
                 self.goToAudioPlayer()
 
     def homeButtonClicked(self):
