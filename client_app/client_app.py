@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         self.loginScreen.loginButton.clicked.connect(self.loginButtonClicked) # clicking login button takes you to movie selection screen
         self.homeScreen.logoutButton.clicked.connect(self.logoutButtonClicked)
         self.watchMovieScreen.homeButton.clicked.connect(self.homeButtonClicked)
-        self.homeScreen.playButton.clicked.connect(self.watchMovieClicked)
+        self.homeScreen.playButton.clicked.connect(self.playButtonClicked)
         
 
     def goToHome(self):
@@ -60,12 +60,15 @@ class MainWindow(QMainWindow):
         # Logs out
         self.goToLogin()
 
-    def watchMovieClicked(self):
+    def playButtonClicked(self):
         # Retrieves selected movie and goes to watch movie screen
-        self.watchMovieScreen.getMovie()
-        self.watchMovieScreen.playButton.setText('Play')
-        sleep(1)
-        self.goToWatchMovie()
+        selectedItemID = self.homeScreen.getSelectedItemID()
+        if selectedItemID >= 0: 
+            if self.homeScreen.stackedWidget.currentIndex() == Constants.MOVIE_SELECTION_SCREEN_INDEX:
+                self.watchMovieScreen.getMovie(selectedItemID)
+                self.watchMovieScreen.playButton.setText('Play')
+                sleep(1)
+                self.goToWatchMovie()
 
     def homeButtonClicked(self):
         self.goToHome()

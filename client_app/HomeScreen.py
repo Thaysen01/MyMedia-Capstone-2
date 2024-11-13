@@ -43,3 +43,10 @@ class HomeScreen(QWidget):
         self.movieSelection.updateMovies()
         self.musicSelection.updateMusic()
 
+    def getSelectedItemID(self):
+        selectedItemID = -1
+        if self.stackedWidget.currentIndex() == Constants.MOVIE_SELECTION_SCREEN_INDEX:
+            selectedItemID = self.movieSelection.getSelectedMovieID()
+        if selectedItemID >= 0:
+            return selectedItemID
+        return -1

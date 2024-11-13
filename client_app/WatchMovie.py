@@ -41,7 +41,7 @@ class WatchMovieScreen(QWidget):
             self.player.play()
             self.playButton.setText('Pause')
 
-    def getMovie(self):
+    def getMovie(self, movieID):
         # Retrieves the selected movie
         
         host='127.0.0.1'
@@ -51,6 +51,7 @@ class WatchMovieScreen(QWidget):
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         clientSocket.connect((host, port))
         clientSocket.sendall(b'getMovieVideo')
+        clientSocket.send(str(movieID).encode())
         # Read file size
         fileSize = int(clientSocket.recv(1024).decode().strip())
         receivedData = bytearray()
