@@ -37,16 +37,6 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QVideoWidget" name="moviePlayer" native="true">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>880</width>
-     <height>495</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="playButton">
    <property name="geometry">
     <rect>
@@ -125,15 +115,20 @@
     <string>Volume</string>
    </property>
   </widget>
+  <widget class="QLabel" name="albumCover">
+   <property name="geometry">
+    <rect>
+     <x>225</x>
+     <y>20</y>
+     <width>450</width>
+     <height>450</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QVideoWidget</class>
-   <extends>QWidget</extends>
-   <header>PyQt6.QtMultimediaWidgets</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
