@@ -1,7 +1,9 @@
 import socket
 import threading
-import os
+import sys, os
 import pickle
+sys.path.append(os.path.abspath(os.path.join('..')))
+import Database.DatabaseFunctions as db
 
 serverRunning = True
 def runServer():
@@ -12,8 +14,6 @@ def runServer():
     port=12345
     #Currently need to convert mp4 file to mp3 and have both in the folder. These should be stored on the device outside of these folders ig, 
     #...Filename="..\..\..\..\Videos\Created Videos\FirstCastedRLSnT.mp4" #location on device
-    audioFilename='movie.mp3'
-    videoFilename='movie.mp4'
     # Create a TCP/IP socket
     serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serverSocket.bind((host, port))
@@ -32,9 +32,10 @@ def runServer():
             # Handle a get movie list/picture request
             if clientChoice == 'getMovies':
                 print('Sending Movie list')
-                # this will be retrieved from the database
-                movieList = ['Spiderman', 'Transformers', 'Harry Potter and the Sorcerer\'s Stone', 'Jurassic Park', 'The Dark Knight', 'Cars', 'Cars 2', 'Interstellar', 'Airbud', 'The Princess Bride']
-                movieImageList = ['spiderman.png', 'transformers.png', 'harry_potter.png', 'jurassic_park.png', 'dark_knight.png', 'cars.png', 'cars_2.png', 'interstellar.png', 'airbud.jpg', 'princess_bride.jpg']
+                movieIDList = db.getMovieIDList()
+                movieList = db.getMovieList()
+                movieImageList = db.getMovieImageList()
+                connection.sendall(pickle.dumps(movieIDList))
                 connection.sendall(pickle.dumps(movieList))
 
                 # Send each movie image file
@@ -58,6 +59,9 @@ def runServer():
             # Handle a get movie video/audio request
             elif clientChoice == 'getMovieVideo':
                 print(f'Connection from {clientAddress}')
+                movieID = int(connection.recv(1024).decode())
+                videoFilename = db.getMovieVideoPath(movieID)
+                audioFilename = db.getMovieAudioPath(movieID)
                 # Send video file
                 send_file(connection, videoFilename)
                 # Send audio file

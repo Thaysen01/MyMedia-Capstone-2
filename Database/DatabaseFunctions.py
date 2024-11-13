@@ -4,12 +4,20 @@ import os.path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(BASE_DIR, 'MyMediaData.db')
 
-def getMoviePath(movieID):
+def getMovieVideoPath(movieID):
     # Gets the filepath of a movie given its id
-
     con = sqlite3.connect(db_path)
     cur = con.cursor()
-    res = cur.execute(f'SELECT filePath FROM coreInfo WHERE ID={movieID}')
+    res = cur.execute(f'SELECT videoPath FROM coreInfo WHERE ID={movieID}')
+    path = res.fetchall()[0]
+    con.close()
+    return path[0]
+
+def getMovieAudioPath(movieID):
+    # Gets the filepath of a movie given its id
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT audioPath FROM coreInfo WHERE ID={movieID}')
     path = res.fetchall()[0]
     con.close()
     return path[0]
