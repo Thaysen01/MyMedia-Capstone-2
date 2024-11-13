@@ -6,6 +6,7 @@ from PyQt6 import uic
 from Login import LoginScreen
 from HomeScreen import HomeScreen
 from WatchMovie import WatchMovieScreen
+from audio_player import AudioPlayer
 import Constants
 from time import sleep
 
@@ -28,6 +29,9 @@ class MainWindow(QMainWindow):
         self.watchMovieScreen = WatchMovieScreen()
         self.stackedWidget.addWidget(self.watchMovieScreen)
 
+        self.audioPlayerScreen = AudioPlayer()
+        self.stackedWidget.addWidget(self.audioPlayerScreen)
+
         # Connect buttons
         self.loginScreen.loginButton.clicked.connect(self.loginButtonClicked) # clicking login button takes you to movie selection screen
         self.homeScreen.logoutButton.clicked.connect(self.logoutButtonClicked)
@@ -47,6 +51,10 @@ class MainWindow(QMainWindow):
         # Sets the current page to the watch movie page
         self.stackedWidget.setCurrentIndex(Constants.WATCH_MOVIE_SCREEN_INDEX)
 
+    def goToAudioPlayer(self):
+        # Sets the current page to the watch movie page
+        self.stackedWidget.setCurrentIndex(Constants.AUDIO_PLAYER_SCREEN_INDEX)
+
     def loginButtonClicked(self):
         # This will eventually handle accounts and whatnot
         self.loginScreen.usernameEdit.clear()
@@ -63,12 +71,15 @@ class MainWindow(QMainWindow):
     def playButtonClicked(self):
         # Retrieves selected movie and goes to watch movie screen
         selectedItemID = self.homeScreen.getSelectedItemID()
+        print(selectedItemID)
         if selectedItemID >= 0: 
             if self.homeScreen.stackedWidget.currentIndex() == Constants.MOVIE_SELECTION_SCREEN_INDEX:
                 self.watchMovieScreen.getMovie(selectedItemID)
                 self.watchMovieScreen.playButton.setText('Play')
                 sleep(1)
                 self.goToWatchMovie()
+            elif self.homeScreen.stackedWidget.currentIndex() == Constants.AUDIO_PLAYER_SCREEN_INDEX:
+                self.goToAudioPlayer()
 
     def homeButtonClicked(self):
         self.goToHome()

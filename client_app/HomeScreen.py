@@ -47,6 +47,8 @@ class HomeScreen(QWidget):
         selectedItemID = -1
         if self.stackedWidget.currentIndex() == Constants.MOVIE_SELECTION_SCREEN_INDEX:
             selectedItemID = self.movieSelection.getSelectedMovieID()
+        elif self.stackedWidget.currentIndex() == Constants.MUSIC_SELECTION_SCREEN_INDEX:
+            selectedItemID = 1
         if selectedItemID >= 0:
             return selectedItemID
         return -1
