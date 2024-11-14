@@ -87,7 +87,7 @@ class MovieSelectionScreen(QWidget):
 
             # receive image
             while len(receivedData) < fileSize:
-                data = clientSocket.recv(1024)
+                data = clientSocket.recv(2)
                 if not data:
                     break
                 receivedData.extend(data)
