@@ -26,8 +26,13 @@ def runServer():
         connection = None
         try:
             connection, clientAddress = serverSocket.accept()
-            clientChoice = 'getMovies'
-            clientChoice = (connection.recv(1024).decode().strip())
+            clientChoice = ''
+            data = b''
+            while data != b'\n':
+                data = connection.recv(1)
+                if data != b'\n':
+                    clientChoice += data.decode().strip()
+            # clientChoice = (connection.recv(1024).decode().strip())
 
             # Handle a get movie list/picture request
             if clientChoice == 'getMovies':

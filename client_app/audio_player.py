@@ -43,8 +43,8 @@ class AudioPlayer(QWidget):
         # Create a TCP/IP socket
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         clientSocket.connect((host, port))
-        clientSocket.sendall(b'getSong')
-        clientSocket.send(str(songID).encode())
+        clientSocket.sendall(b'getSong\n')
+        clientSocket.sendall((str(songID) + '\n').encode())
         
         # Receive audio file
         audio_file_data = self.receive_file(clientSocket)

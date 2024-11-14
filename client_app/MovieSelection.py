@@ -67,7 +67,7 @@ class MovieSelectionScreen(QWidget):
         # Create a TCP/IP socket
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         clientSocket.connect((host, port))
-        clientSocket.sendall(b'getMovies')
+        clientSocket.sendall(b'getMovies\n')
         data = clientSocket.recv(1024)
         movieIDList = pickle.loads(data)
         data = clientSocket.recv(1024)
