@@ -19,8 +19,10 @@ class WatchMovieScreen(QWidget):
         self.video_player = QMediaPlayer()
         self.video_player.setVideoOutput(self.moviePlayer)
         self.playButton.clicked.connect(self.playButtonClicked)
-        self.fullScreenButton.setShortcut(QKeySequence(Qt.Key.Key_Escape))
+        #self.fullScreenButton.setShortcut(QKeySequence(Qt.Key.Key_Escape))
         self.fullScreenButton.clicked.connect(self.fullScreenButtonClicked)
+
+        self.moviePlayer.installEventFilter(self)
 
         # Movie slider things
         self.video_player.durationChanged.connect(self.durationChanged)
@@ -32,11 +34,37 @@ class WatchMovieScreen(QWidget):
         self.audio_output = QAudioOutput()
         self.audio_player.setAudioOutput(self.audio_output)
 
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setFocus()
+        
+        
+    # def keyPressEvent(self, event):
+    #     print("key pressed:", event.key())
+    #     if event.key() == Qt.Key.Key_Escape:
+    #         print("escape pressed")
+    #         if self.moviePlayer.isFullScreen():
+    #             print("is fullscreen trying to exit")
+    #             self.moviePlayer.setFullScreen(False)
+    #     else:
+    #         super().keyPressEvent(event)
+
+    def eventFilter(self, source, event):
+        if source == self.moviePlayer and event.type() == QEvent.Type.KeyPress:
+            print("eventFilter key pressed:", event.key())
+            if event.key() == Qt.Key.Key_Escape:
+                print("Escape pressed in event filter")
+                if self.moviePlayer.isFullScreen():
+                    print("Exiting fullscreen")
+                    self.moviePlayer.setFullScreen(False)
+                    return True  # Event handled
+        return super().eventFilter(source, event)
+
+
     def fullScreenButtonClicked(self):
-        if self.moviePlayer.isFullScreen():
-            self.moviePlayer.setFullScreen(False)
-        else:
+        if not self.moviePlayer.isFullScreen():
             self.moviePlayer.setFullScreen(True)
+        else:
+            self.moviePlayer.setFullScreen(False)
 
     def playButtonClicked(self):
         # Handles the pause/play button functionality
