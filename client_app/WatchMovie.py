@@ -4,7 +4,6 @@ from PyQt6.QtGui import *
 from PyQt6 import uic
 from PyQt6.QtMultimedia import *
 from PyQt6.QtMultimediaWidgets import *
-from time import sleep
 import socket
 import tempfile
 import sys
@@ -19,10 +18,11 @@ class WatchMovieScreen(QWidget):
         self.video_player = QMediaPlayer()
         self.video_player.setVideoOutput(self.moviePlayer)
         self.playButton.clicked.connect(self.playButtonClicked)
-        #self.fullScreenButton.setShortcut(QKeySequence(Qt.Key.Key_Escape))
         self.fullScreenButton.clicked.connect(self.fullScreenButtonClicked)
 
+        # Install event filter on both moviePlayer and self
         self.moviePlayer.installEventFilter(self)
+        self.installEventFilter(self)
 
         # Movie slider things
         self.video_player.durationChanged.connect(self.durationChanged)
@@ -36,39 +36,43 @@ class WatchMovieScreen(QWidget):
 
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setFocus()
-        
-        
-    # def keyPressEvent(self, event):
-    #     print("key pressed:", event.key())
-    #     if event.key() == Qt.Key.Key_Escape:
-    #         print("escape pressed")
-    #         if self.moviePlayer.isFullScreen():
-    #             print("is fullscreen trying to exit")
-    #             self.moviePlayer.setFullScreen(False)
-    #     else:
-    #         super().keyPressEvent(event)
+
+        # Initialize fullscreen video widget
+        self.fullscreenPlayer = None
 
     def eventFilter(self, source, event):
-        if source == self.moviePlayer and event.type() == QEvent.Type.KeyPress:
-            print("eventFilter key pressed:", event.key())
-            if event.key() == Qt.Key.Key_Escape:
-                print("Escape pressed in event filter")
-                if self.moviePlayer.isFullScreen():
-                    print("Exiting fullscreen")
-                    self.moviePlayer.setFullScreen(False)
-                    return True  # Event handled
+        if event.type() == QEvent.Type.KeyPress and event.key() == Qt.Key.Key_Escape:
+            if self.fullscreenPlayer is not None:
+                self.exitFullScreen()
+                return True  # Event handled
         return super().eventFilter(source, event)
 
-
     def fullScreenButtonClicked(self):
-        if not self.moviePlayer.isFullScreen():
-            self.moviePlayer.setFullScreen(True)
+        if self.fullscreenPlayer is None:
+            self.enterFullScreen()
         else:
-            self.moviePlayer.setFullScreen(False)
+            self.exitFullScreen()
+
+    def enterFullScreen(self):
+        # Create a new video widget for fullscreen
+        self.fullscreenPlayer = QVideoWidget()
+        self.fullscreenPlayer.setWindowFlags(Qt.WindowType.Window)
+        self.fullscreenPlayer.showFullScreen()
+        self.fullscreenPlayer.installEventFilter(self)
+        # Switch the video output to the fullscreen widget
+        self.video_player.setVideoOutput(self.fullscreenPlayer)
+
+    def exitFullScreen(self):
+        # Switch the video output back to the original widget
+        self.video_player.setVideoOutput(self.moviePlayer)
+        # Remove the fullscreen widget
+        self.fullscreenPlayer.hide()
+        self.fullscreenPlayer.deleteLater()
+        self.fullscreenPlayer = None
 
     def playButtonClicked(self):
         # Handles the pause/play button functionality
-        if self.video_player.isPlaying():
+        if self.video_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
             self.video_player.pause()
             self.audio_player.pause()
             self.playButton.setText('Play')
@@ -79,7 +83,7 @@ class WatchMovieScreen(QWidget):
 
     def getMovie(self, movieID):
         # Retrieves the selected movie and audio
-        
+
         host='127.0.0.1'
         port=12345
 
@@ -88,14 +92,14 @@ class WatchMovieScreen(QWidget):
         clientSocket.connect((host, port))
         clientSocket.sendall(b'getMovieVideo\n')
         clientSocket.sendall((str(movieID) + '\n').encode())
-        
+
         # Receive video file
         video_file_data = self.receive_file(clientSocket)
         video_temp_path = self.save_file_to_temp(video_file_data, '.mp4')
-        
+
         # Set video source
         self.video_player.setSource(QUrl.fromLocalFile(video_temp_path))
-        
+
         # Set audio source
         audio_url = QUrl.fromLocalFile(video_temp_path)
         if audio_url.isValid():
@@ -107,9 +111,9 @@ class WatchMovieScreen(QWidget):
         file_size_data = clientSocket.recv(4)  # Receive the first 4 bytes for the file size
         if len(file_size_data) < 4:
             raise ValueError("Failed to receive file size")
-        
+
         fileSize = int.from_bytes(file_size_data, byteorder='big')  # Convert the 4 bytes to an integer
-        
+
         receivedData = bytearray()
 
         # Receive the actual file data
@@ -126,7 +130,7 @@ class WatchMovieScreen(QWidget):
         with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tempFile:
             tempFile.write(file_data)
             tempFilePath = tempFile.name
-        
+
         return tempFilePath
 
     def setPosition(self, position):
@@ -137,7 +141,7 @@ class WatchMovieScreen(QWidget):
     def positionChanged(self, position):
         # Sets the slider position based on the movie position
         self.movieSlider.setValue(position)
-    
+
     def durationChanged(self, duration):
         # Changes the movie slider range based on the movie's duration
         self.movieSlider.setRange(0, duration)
