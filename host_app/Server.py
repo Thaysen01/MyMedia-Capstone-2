@@ -61,6 +61,14 @@ def runServer():
                                 break
                             connection.sendall(data)
 
+            # Handle a get movie list/picture request
+            elif clientChoice == 'getMusic':
+                print('Sending Movie list')
+                songIDList = db.getSongIDList()
+                songList = db.getSongList()
+                connection.sendall(pickle.dumps(songIDList))
+                connection.sendall(pickle.dumps(songList))
+
             # Handle a get movie video/audio request
             elif clientChoice == 'getMovieVideo':
                 print(f'Connection from {clientAddress}')

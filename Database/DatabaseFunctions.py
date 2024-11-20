@@ -60,3 +60,30 @@ def getSongAudioPath(songID):
     path = res.fetchall()[0]
     con.close()
     return path[0]
+
+def getSongList():
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT title FROM coreInfo WHERE type="song"')
+    songList = res.fetchall()
+    con.close()
+    return [song[0] for song in songList]
+
+def getSongIDList():
+    # Returns a list of song ids from the database
+
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT ID FROM coreInfo WHERE type="song"')
+    songIDList = res.fetchall()
+    con.close()
+    return [songID[0] for songID in songIDList]
+
+def getSongImage(songID):
+    # Gets the filepath of a song given its id
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT imagePath FROM coreInfo WHERE ID={songID}')
+    path = res.fetchall()[0]
+    con.close()
+    return path[0]
