@@ -1,12 +1,10 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
+from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import Qt, QEvent, QUrl
 from PyQt6 import uic
-from PyQt6.QtMultimedia import *
-from PyQt6.QtMultimediaWidgets import *
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtMultimediaWidgets import QVideoWidget
 import socket
 import tempfile
-import sys
 import os
 
 class WatchMovieScreen(QWidget):
@@ -24,15 +22,19 @@ class WatchMovieScreen(QWidget):
         self.moviePlayer.installEventFilter(self)
         self.installEventFilter(self)
 
-        # Movie slider things
+        # Movie slider setup
         self.video_player.durationChanged.connect(self.durationChanged)
         self.video_player.positionChanged.connect(self.positionChanged)
         self.movieSlider.sliderMoved.connect(self.setPosition)
 
-        # Audio player setup
-        self.audio_player = QMediaPlayer()
+        # Audio output setup
         self.audio_output = QAudioOutput()
-        self.audio_player.setAudioOutput(self.audio_output)
+        self.video_player.setAudioOutput(self.audio_output)
+
+        # Volume slider setup (changed to align with UI)
+        self.audioSlider.valueChanged.connect(self.changeVolume)
+        self.audioSlider.setRange(0, 100)  # Slider range: 0 to 100
+        self.audioSlider.setValue(int(self.audio_output.volume() * 100))  # Set initial volume
 
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.setFocus()
@@ -61,6 +63,8 @@ class WatchMovieScreen(QWidget):
         self.fullscreenPlayer.installEventFilter(self)
         # Switch the video output to the fullscreen widget
         self.video_player.setVideoOutput(self.fullscreenPlayer)
+        # Ensure the audio output remains set
+        self.video_player.setAudioOutput(self.audio_output)
 
     def exitFullScreen(self):
         # Switch the video output back to the original widget
@@ -74,18 +78,16 @@ class WatchMovieScreen(QWidget):
         # Handles the pause/play button functionality
         if self.video_player.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
             self.video_player.pause()
-            self.audio_player.pause()
             self.playButton.setText('Play')
         else:
             self.video_player.play()
-            self.audio_player.play()
             self.playButton.setText('Pause')
 
     def getMovie(self, movieID):
-        # Retrieves the selected movie and audio
+        # Retrieves the selected movie
 
-        host='127.0.0.1'
-        port=12345
+        host = '127.0.0.1'
+        port = 12345
 
         # Create a TCP/IP socket
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -97,13 +99,8 @@ class WatchMovieScreen(QWidget):
         video_file_data = self.receive_file(clientSocket)
         video_temp_path = self.save_file_to_temp(video_file_data, '.mp4')
 
-        # Set video source
+        # Set media source
         self.video_player.setSource(QUrl.fromLocalFile(video_temp_path))
-
-        # Set audio source
-        audio_url = QUrl.fromLocalFile(video_temp_path)
-        if audio_url.isValid():
-            self.audio_player.setSource(audio_url)
 
     def receive_file(self, clientSocket):
         # Helper function to receive a file from the server
@@ -136,7 +133,6 @@ class WatchMovieScreen(QWidget):
     def setPosition(self, position):
         # Sets the movie position based on the slider
         self.video_player.setPosition(position)
-        self.audio_player.setPosition(position)
 
     def positionChanged(self, position):
         # Sets the slider position based on the movie position
@@ -146,6 +142,9 @@ class WatchMovieScreen(QWidget):
         # Changes the movie slider range based on the movie's duration
         self.movieSlider.setRange(0, duration)
 
+    def changeVolume(self, value):
+        # Adjust the volume of the audio output
+        self.audio_output.setVolume(value / 100.0)
+
     def stopMovie(self):
         self.video_player.stop()
-        self.audio_player.stop()
