@@ -7,6 +7,9 @@ from PyQt6.QtMultimediaWidgets import *
 from time import sleep
 import socket
 import tempfile
+from PIL import Image
+import io
+import os
 
 class AudioPlayer(QWidget):
     def __init__(self, *args, **kwargs):
@@ -48,8 +51,14 @@ class AudioPlayer(QWidget):
         
         # Receive audio file
         audio_file_data = self.receive_file(clientSocket)
+        album_file_data = self.receive_file(clientSocket)
         audio_temp_path = self.save_file_to_temp(audio_file_data, '.mp3')
+        album_temp_path = self.save_file_to_temp(album_file_data, '.png')
         
+        # Set album cover
+        self.albumCover.setScaledContents(True)
+        self.albumCover.setPixmap(QPixmap(album_temp_path))
+
         # Set audio source
         audio_url = QUrl.fromLocalFile(audio_temp_path)
         if audio_url.isValid():

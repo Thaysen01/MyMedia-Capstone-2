@@ -82,8 +82,10 @@ def runServer():
                 print(f'Connection from {clientAddress}')
                 songID = int(connection.recv(1024).decode())
                 audioFilename = db.getSongAudioPath(songID)
+                songImageName = db.getSongImage(songID)
                 # Send audio file
-                send_file(connection, audioFilename)       
+                send_file(connection, audioFilename)    
+                send_file(connection, songImageName)   
 
         except Exception as e:
             print(e)
