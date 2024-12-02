@@ -87,3 +87,16 @@ def getSongImage(songID):
     path = res.fetchall()[0]
     con.close()
     return path[0]
+
+def addSong(songTitle, songPath, songImagePath):
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    cur.execute(f'INSERT INTO CoreInfo (title, type, imagePath, audioPath) VALUES ({songTitle}, song, {songPath}, {songImagePath})')
+    con.close()
+
+
+def addMovie(movieTitle, moviePath, movieImagePath):
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    cur.execute(f'INSERT INTO CoreInfo (title, type, imagePath, audioPath) VALUES ({movieTitle}, movie, {moviePath}, {movieImagePath})')
+    con.close()

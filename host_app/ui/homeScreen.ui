@@ -25,12 +25,12 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="select_file_btn">
+  <widget class="QPushButton" name="select_media_btn">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>300</y>
-     <width>171</width>
+     <x>640</x>
+     <y>210</y>
+     <width>91</width>
      <height>31</height>
     </rect>
    </property>
@@ -41,8 +41,8 @@
   <widget class="QPushButton" name="upload_btn">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>340</y>
+     <x>360</x>
+     <y>440</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -51,17 +51,112 @@
     <string>Upload File</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="manage_files_btn">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>380</y>
-     <width>171</width>
+     <x>110</x>
+     <y>180</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Media File Path: </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>270</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Image File Path:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="media_path">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>180</y>
+     <width>521</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="media_image_path">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>270</y>
+     <width>521</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="select_image_btn">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>300</y>
+     <width>91</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Manage Files</string>
+    <string>Select File</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>350</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>File Type:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="media_type_dropdown">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>350</y>
+     <width>73</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>140</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Media Title:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="media_path_2">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>140</y>
+     <width>521</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
