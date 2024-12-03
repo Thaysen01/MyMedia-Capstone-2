@@ -91,12 +91,14 @@ def getSongImage(songID):
 def addSong(songTitle, songPath, songImagePath):
     con = sqlite3.connect(db_path)
     cur = con.cursor()
-    cur.execute(f'INSERT INTO CoreInfo (title, type, imagePath, audioPath) VALUES ({songTitle}, song, {songPath}, {songImagePath})')
+    cur.execute(f'INSERT INTO coreInfo (title, type, imagePath, audioPath) VALUES ("{songTitle}", "song", "{songImagePath}", "{songPath}")')
+    con.commit()
     con.close()
 
 
 def addMovie(movieTitle, moviePath, movieImagePath):
     con = sqlite3.connect(db_path)
     cur = con.cursor()
-    cur.execute(f'INSERT INTO CoreInfo (title, type, imagePath, audioPath) VALUES ({movieTitle}, movie, {moviePath}, {movieImagePath})')
+    cur.execute(f'INSERT INTO coreInfo (title, type, imagePath, videoPath) VALUES ("{movieTitle}", "movie", "{movieImagePath}", "{moviePath}")')
+    con.commit()
     con.close()

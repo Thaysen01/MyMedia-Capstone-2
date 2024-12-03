@@ -71,10 +71,10 @@ def runServer():
 
             # Handle a get movie video/audio request
             elif clientChoice == 'getMovieVideo':
-                print(f'Connection from {clientAddress}')
+                print(f'Connection from {clientAddress} requesting movie')
                 movieID = int(connection.recv(1024).decode())
+                print(movieID)
                 videoFilename = db.getMovieVideoPath(movieID)
-                audioFilename = db.getMovieAudioPath(movieID)
                 # Send video file
                 send_file(connection, videoFilename)
             

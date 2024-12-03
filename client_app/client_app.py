@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
                 sleep(1)
                 self.goToWatchMovie()
             elif self.homeScreen.stackedWidget.currentIndex() == Constants.MUSIC_SELECTION_SCREEN_INDEX:
-                self.audioPlayerScreen.getSong(3)
+                self.audioPlayerScreen.getSong(selectedItemID)
                 self.watchMovieScreen.playButton.setText('Play')
                 sleep(1)
                 self.goToAudioPlayer()

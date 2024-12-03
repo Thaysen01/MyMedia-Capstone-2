@@ -46,3 +46,6 @@ class MusicSelectionScreen(QWidget):
         clientSocket.close()
         retVal = {'songs': songs, 'songIDList': songIDList}
         return retVal
+    
+    def getSelectedSongID(self):
+        return self.musicInfo['songIDList'][self.musicTable.currentRow()]

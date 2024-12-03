@@ -146,7 +146,7 @@
     <string>Media Title:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="media_path_2">
+  <widget class="QLineEdit" name="media_title">
    <property name="geometry">
     <rect>
      <x>210</x>
