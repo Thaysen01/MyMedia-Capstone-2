@@ -102,3 +102,19 @@ def addMovie(movieTitle, moviePath, movieImagePath):
     cur.execute(f'INSERT INTO coreInfo (title, type, imagePath, videoPath) VALUES ("{movieTitle}", "movie", "{movieImagePath}", "{moviePath}")')
     con.commit()
     con.close()
+
+def getMediaList():
+    # Gets a list of all media ids, types, and names
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT id, type, title FROM coreInfo')
+    mediaInfo = res.fetchall()
+    con.close()
+    return mediaInfo
+
+def removeMedia(mediaID):
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    cur.execute(f'DELETE FROM coreInfo WHERE id={mediaID}')
+    con.commit()
+    con.close()

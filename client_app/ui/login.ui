@@ -50,36 +50,20 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Log In</string>
+    <string>Connect</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="usernameEdit">
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>251</y>
+     <y>270</y>
      <width>221</width>
      <height>31</height>
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Username/Email</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="passwordEdit">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>290</y>
-     <width>221</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Password</enum>
-   </property>
-   <property name="placeholderText">
-    <string>Password</string>
+    <string>Host IP Address</string>
    </property>
   </widget>
  </widget>
