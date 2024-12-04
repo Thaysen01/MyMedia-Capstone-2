@@ -1,10 +1,7 @@
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
+from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import QUrl
 from PyQt6 import uic
-from PyQt6.QtMultimedia import *
-from PyQt6.QtMultimediaWidgets import *
-from time import sleep
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 import socket
 import tempfile
 from PIL import Image
@@ -16,21 +13,25 @@ class AudioPlayer(QWidget):
         super().__init__(*args, **kwargs)
         uic.loadUi("ui/audioPlayer.ui", self)
 
+        # Audio player setup
         self.audioPlayer = QMediaPlayer()
         self.audioOutput = QAudioOutput()
         self.audioPlayer.setAudioOutput(self.audioOutput)
         self.playButton.clicked.connect(self.playButtonClicked)
 
-        # Movie slider things
+        # Position slider setup
         self.audioPlayer.durationChanged.connect(self.durationChanged)
         self.audioPlayer.positionChanged.connect(self.positionChanged)
         self.movieSlider.sliderMoved.connect(self.setPosition)
 
-        
+        # Volume slider setup
+        self.audioSlider.valueChanged.connect(self.changeVolume)
+        self.audioSlider.setRange(0, 100)  # Slider range: 0 to 100
+        self.audioSlider.setValue(int(self.audioOutput.volume() * 100))  # Set initial volume
 
     def playButtonClicked(self):
         # Handles the pause/play button functionality
-        if self.audioPlayer.isPlaying():
+        if self.audioPlayer.playbackState() == QMediaPlayer.PlaybackState.PlayingState:
             self.audioPlayer.pause()
             self.playButton.setText('Play')
         else:
@@ -38,17 +39,17 @@ class AudioPlayer(QWidget):
             self.playButton.setText('Pause')
 
     def getSong(self, songID):
-        # Retrieves the selected movie and audio
-        
-        host='127.0.0.1'
-        port=12345
+        # Retrieves the selected song
+
+        host = '127.0.0.1'
+        port = 12345
 
         # Create a TCP/IP socket
         clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         clientSocket.connect((host, port))
         clientSocket.sendall(b'getSong\n')
         clientSocket.sendall((str(songID) + '\n').encode())
-        
+
         # Receive audio file
         audio_file_data = self.receive_file(clientSocket)
         album_file_data = self.receive_file(clientSocket)
@@ -65,18 +66,22 @@ class AudioPlayer(QWidget):
             self.audioPlayer.setSource(audio_url)
 
     def setPosition(self, position):
-        # Sets the movie position based on the slider
+        # Sets the song position based on the slider
         self.audioPlayer.setPosition(position)
 
     def positionChanged(self, position):
-        # Sets the slider position based on the movie position
+        # Sets the slider position based on the song position
         self.movieSlider.setValue(position)
-    
+
     def durationChanged(self, duration):
-        # Changes the movie slider range based on the movie's duration
+        # Changes the slider range based on the song's duration
         self.movieSlider.setRange(0, duration)
 
-    def stopMovie(self):
+    def changeVolume(self, value):
+        # Adjust the volume of the audio output
+        self.audioOutput.setVolume(value / 100.0)
+
+    def stopSong(self):
         self.audioPlayer.stop()
 
     def receive_file(self, clientSocket):
@@ -85,9 +90,9 @@ class AudioPlayer(QWidget):
         file_size_data = clientSocket.recv(4)  # Receive the first 4 bytes for the file size
         if len(file_size_data) < 4:
             raise ValueError("Failed to receive file size")
-        
+
         fileSize = int.from_bytes(file_size_data, byteorder='big')  # Convert the 4 bytes to an integer
-        
+
         receivedData = bytearray()
 
         # Receive the actual file data
@@ -104,5 +109,5 @@ class AudioPlayer(QWidget):
         with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tempFile:
             tempFile.write(file_data)
             tempFilePath = tempFile.name
-        
+
         return tempFilePath
