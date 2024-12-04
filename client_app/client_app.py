@@ -59,7 +59,6 @@ class MainWindow(QMainWindow):
     def loginButtonClicked(self):
         # This will eventually handle accounts and whatnot
         self.loginScreen.usernameEdit.clear()
-        self.loginScreen.passwordEdit.clear()
         # Show the movies selection screen upon logging in
         self.homeScreen.showMovies()
         self.homeScreen.updateContent()
@@ -79,7 +78,7 @@ class MainWindow(QMainWindow):
                 sleep(1)
                 self.goToWatchMovie()
             elif self.homeScreen.stackedWidget.currentIndex() == Constants.MUSIC_SELECTION_SCREEN_INDEX:
-                self.audioPlayerScreen.getSong(3)
+                self.audioPlayerScreen.getSong(selectedItemID)
                 self.watchMovieScreen.playButton.setText('Play')
                 sleep(1)
                 self.goToAudioPlayer()

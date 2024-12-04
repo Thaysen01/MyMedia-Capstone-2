@@ -60,3 +60,61 @@ def getSongAudioPath(songID):
     path = res.fetchall()[0]
     con.close()
     return path[0]
+
+def getSongList():
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT title FROM coreInfo WHERE type="song"')
+    songList = res.fetchall()
+    con.close()
+    return [song[0] for song in songList]
+
+def getSongIDList():
+    # Returns a list of song ids from the database
+
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT ID FROM coreInfo WHERE type="song"')
+    songIDList = res.fetchall()
+    con.close()
+    return [songID[0] for songID in songIDList]
+
+def getSongImage(songID):
+    # Gets the filepath of a song given its id
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT imagePath FROM coreInfo WHERE ID={songID}')
+    path = res.fetchall()[0]
+    con.close()
+    return path[0]
+
+def addSong(songTitle, songPath, songImagePath):
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    cur.execute(f'INSERT INTO coreInfo (title, type, imagePath, audioPath) VALUES ("{songTitle}", "song", "{songImagePath}", "{songPath}")')
+    con.commit()
+    con.close()
+
+
+def addMovie(movieTitle, moviePath, movieImagePath):
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    cur.execute(f'INSERT INTO coreInfo (title, type, imagePath, videoPath) VALUES ("{movieTitle}", "movie", "{movieImagePath}", "{moviePath}")')
+    con.commit()
+    con.close()
+
+def getMediaList():
+    # Gets a list of all media ids, types, and names
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    res = cur.execute(f'SELECT id, type, title FROM coreInfo')
+    mediaInfo = res.fetchall()
+    con.close()
+    return mediaInfo
+
+def removeMedia(mediaID):
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
+    cur.execute(f'DELETE FROM coreInfo WHERE id={mediaID}')
+    con.commit()
+    con.close()

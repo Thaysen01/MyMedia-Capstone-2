@@ -61,12 +61,20 @@ def runServer():
                                 break
                             connection.sendall(data)
 
+            # Handle a get movie list/picture request
+            elif clientChoice == 'getMusic':
+                print('Sending Movie list')
+                songIDList = db.getSongIDList()
+                songList = db.getSongList()
+                connection.sendall(pickle.dumps(songIDList))
+                connection.sendall(pickle.dumps(songList))
+
             # Handle a get movie video/audio request
             elif clientChoice == 'getMovieVideo':
-                print(f'Connection from {clientAddress}')
+                print(f'Connection from {clientAddress} requesting movie')
                 movieID = int(connection.recv(1024).decode())
+                print(movieID)
                 videoFilename = db.getMovieVideoPath(movieID)
-                audioFilename = db.getMovieAudioPath(movieID)
                 # Send video file
                 send_file(connection, videoFilename)
             
@@ -74,8 +82,10 @@ def runServer():
                 print(f'Connection from {clientAddress}')
                 songID = int(connection.recv(1024).decode())
                 audioFilename = db.getSongAudioPath(songID)
+                songImageName = db.getSongImage(songID)
                 # Send audio file
-                send_file(connection, audioFilename)       
+                send_file(connection, audioFilename)    
+                send_file(connection, songImageName)   
 
         except Exception as e:
             print(e)

@@ -1,6 +1,7 @@
 # Main app stacked widget (login, home, play movie, read book) indexes
-LOGIN_SCREEN_INDEX = 0
-HOME_SCREEN_INDEX = 1
+HOME_SCREEN_INDEX = 0
+ADD_MEDIA_SCREEN_INDEX = 1
+MANAGE_MEDIA_SCREEN_INDEX = 2
 
 # Home screen stacked widget indexes
 MOVIE_SELECTION_SCREEN_INDEX = 0
