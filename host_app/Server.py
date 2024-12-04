@@ -10,7 +10,7 @@ def runServer():
     global serverRunning
 
     serverRunning = True
-    host='127.0.0.1'
+    host='0.0.0.0'
     port=12345
     #Currently need to convert mp4 file to mp3 and have both in the folder. These should be stored on the device outside of these folders ig, 
     #...Filename="..\..\..\..\Videos\Created Videos\FirstCastedRLSnT.mp4" #location on device
