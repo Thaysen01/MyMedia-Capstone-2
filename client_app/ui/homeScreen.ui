@@ -51,7 +51,7 @@
     <string>Music</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="booksButton">
+  <widget class="QPushButton" name="refreshButton">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -61,20 +61,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Books</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="settingsButton">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>180</y>
-     <width>171</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Settings</string>
+    <string>Refresh</string>
    </property>
   </widget>
   <widget class="QStackedWidget" name="stackedWidget">

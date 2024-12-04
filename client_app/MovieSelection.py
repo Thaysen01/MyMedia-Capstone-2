@@ -61,7 +61,7 @@ class MovieSelectionScreen(QWidget):
             os.makedirs("movie_images")
 
         # Set connection variables    
-        host='127.0.0.1'
+        host=Constants.host
         port=12345
 
         # Create a TCP/IP socket

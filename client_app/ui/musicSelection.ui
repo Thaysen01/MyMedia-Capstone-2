@@ -39,7 +39,7 @@
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Library</string>
+     <string>Music Library</string>
     </attribute>
     <widget class="QTableWidget" name="musicTable">
      <property name="geometry">
@@ -79,11 +79,11 @@
      </attribute>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
+   <!-- <widget class="QWidget" name="tab_2">
     <attribute name="title">
      <string>Playlists</string>
     </attribute>
-   </widget>
+   </widget> -->
   </widget>
  </widget>
  <resources/>

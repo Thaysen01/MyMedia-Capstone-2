@@ -5,6 +5,7 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtMultimediaWidgets import QVideoWidget
 import socket
 import tempfile
+import Constants
 import os
 
 class WatchMovieScreen(QWidget):
@@ -86,7 +87,7 @@ class WatchMovieScreen(QWidget):
     def getMovie(self, movieID):
         # Retrieves the selected movie
 
-        host = '127.0.0.1'
+        host = Constants.host
         port = 12345
 
         # Create a TCP/IP socket

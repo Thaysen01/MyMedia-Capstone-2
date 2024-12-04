@@ -1,9 +1,11 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QUrl
+from PyQt6.QtGui import *
 from PyQt6 import uic
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 import socket
 import tempfile
+import Constants
 from PIL import Image
 import io
 import os
@@ -41,7 +43,7 @@ class AudioPlayer(QWidget):
     def getSong(self, songID):
         # Retrieves the selected song
 
-        host = '127.0.0.1'
+        host = Constants.host
         port = 12345
 
         # Create a TCP/IP socket

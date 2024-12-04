@@ -3,7 +3,6 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6 import uic
 from MovieSelection import MovieSelectionScreen
-from BookSelection import BookSelectionScreen
 from MusicSelection import MusicSelectionScreen
 import Constants
 
@@ -19,13 +18,11 @@ class HomeScreen(QWidget):
         self.musicSelection = MusicSelectionScreen()
         self.stackedWidget.addWidget(self.musicSelection)
 
-        self.bookSelection = BookSelectionScreen()
-        self.stackedWidget.addWidget(self.bookSelection)
 
         # Connect buttons
         self.moviesButton.clicked.connect(self.showMovies)
         self.musicButton.clicked.connect(self.showMusic)
-        self.booksButton.clicked.connect(self.showBooks)
+        self.refreshButton.clicked.connect(self.updateContent)
 
     def showMovies(self):
         self.movieSelection.tabWidget.setCurrentIndex(Constants.LIBRARY_INDEX)
@@ -35,9 +32,6 @@ class HomeScreen(QWidget):
         self.musicSelection.tabWidget.setCurrentIndex(Constants.LIBRARY_INDEX)
         self.stackedWidget.setCurrentIndex(Constants.MUSIC_SELECTION_SCREEN_INDEX)
 
-    def showBooks(self):
-        self.bookSelection.tabWidget.setCurrentIndex(Constants.LIBRARY_INDEX)
-        self.stackedWidget.setCurrentIndex(Constants.BOOK_SELECTION_SCREEN_INDEX)
 
     def updateContent(self):
         self.movieSelection.updateMovies()

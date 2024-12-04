@@ -58,14 +58,16 @@ class MainWindow(QMainWindow):
 
     def loginButtonClicked(self):
         # This will eventually handle accounts and whatnot
-        self.loginScreen.usernameEdit.clear()
-        # Show the movies selection screen upon logging in
-        self.homeScreen.showMovies()
-        self.homeScreen.updateContent()
-        self.goToHome()
+        Constants.host = self.loginScreen.usernameEdit.text()
+        if len(Constants.host) > 0:
+            # Show the movies selection screen upon logging in
+            self.homeScreen.showMovies()
+            self.homeScreen.updateContent()
+            self.goToHome()
     
     def logoutButtonClicked(self):
         # Logs out
+        Constants.host = ''
         self.goToLogin()
 
     def playButtonClicked(self):

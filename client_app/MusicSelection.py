@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6 import uic
+import Constants
 import math
 import socket
 import pickle
@@ -31,7 +32,7 @@ class MusicSelectionScreen(QWidget):
         # Gets the list of uploaded music from the host app
 
         # Set connection variables    
-        host='127.0.0.1'
+        host=Constants.host
         port=12345
 
         # Create a TCP/IP socket
