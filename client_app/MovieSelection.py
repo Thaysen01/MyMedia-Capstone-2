@@ -25,6 +25,7 @@ class MovieSelectionScreen(QWidget):
         movieList = self.movieInfo['movies']
         movieImages = self.movieInfo['coverImages']
         movieTable = self.tabWidget.widget(0).children()[0]
+        movieTable.setRowCount(0)
         movieTable.setRowCount(math.ceil(len(movieList) / MOVIE_TABLE_COLUMN_COUNT))
         movieTable.setColumnCount(MOVIE_TABLE_COLUMN_COUNT)
 
@@ -87,7 +88,7 @@ class MovieSelectionScreen(QWidget):
 
             # receive image
             while len(receivedData) < fileSize:
-                data = clientSocket.recv(2)
+                data = clientSocket.recv(1)
                 if not data:
                     break
                 receivedData.extend(data)
