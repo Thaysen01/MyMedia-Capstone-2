@@ -1,8 +1,7 @@
-# Plex Clone - Capstone-2
+# MyMedia - Capstone-2
 
 
 
-
-### Datbase info
+### Database Information
 - DB Browser For SQLite v3.13.1
 -   https://github.com/sqlitebrowser/sqlitebrowser/releases/tag/v3.13.1-rc1
